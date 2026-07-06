@@ -767,7 +767,7 @@ async def roleplayrequest(
         await channel.send(
 
             embed=embed,
-            allowed_mentions=discord.AllowedMentions(roles=True)
+            
         )
 
     await interaction.response.send_message(
@@ -778,6 +778,14 @@ async def roleplayrequest(
     import discord
 from discord import app_commands
 import time
+
+@bot.event
+async def on_ready():
+    try:
+        await bot.tree.sync()
+        print("Slash commands synced")
+    except Exception as e:
+        print(f"Sync failed: {e}")
 
 # ---------------- CONFIG ----------------
 STAFF_ROLE_ID = 1515898985204944966
