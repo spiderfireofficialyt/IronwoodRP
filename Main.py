@@ -721,7 +721,7 @@ async def ping(ctx: commands.Context):
     import discord
 from discord import app_commands
 
-RP_LOG_CHANNEL = 1515899258522566867
+RP_LOG_CHANNEL = 1515899259579400213
 STAFF_ROLE_ID = 1515898975763562579
 
 
