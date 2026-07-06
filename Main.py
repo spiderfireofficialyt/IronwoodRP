@@ -721,64 +721,6 @@ async def ping(ctx: commands.Context):
     import discord
 from discord import app_commands
 
-RP_LOG_CHANNEL = 1515899259579400213
-STAFF_ROLE_ID = 1515898975763562579
-
-
-@bot.tree.command(
-    name="roleplayrequest",
-    description="Submit a roleplay request for Ironwood."
-)
-@app_commands.describe(
-    roblox_user="Roblox Username",
-    roleplay_type="Type of roleplay (DOT, LEO, Fire, Civ, etc.)",
-    location="Location (required for DOT)"
-)
-async def roleplayrequest(
-    interaction: discord.Interaction,
-    roblox_user: str,
-    roleplay_type: str,
-    location: str = None
-):
-
-    roleplay_type = roleplay_type.upper()
-
-    if roleplay_type == "DOT" and not location:
-        return await interaction.response.send_message(
-            "❌ DOT roleplays require a location.",
-            ephemeral=True
-        )
-
-    embed = discord.Embed(
-        title="📋 Ironwood Permission Log",
-        color=discord.Color.blue()
-    )
-
-    embed.add_field(name="👤 Discord User", value=interaction.user.mention, inline=False)
-    embed.add_field(name="🎮 Roblox Username", value=roblox_user, inline=False)
-    embed.add_field(name="🚨 Roleplay Type", value=roleplay_type, inline=False)
-    embed.add_field(name="📍 Location", value=location or "N/A", inline=False)
-
-    embed.set_footer(text="Ironwood State Roleplay • RP System")
-
-    channel = bot.get_channel(RP_LOG_CHANNEL)
-
-    if channel:
-        await channel.send(
-
-            embed=embed,
-            
-        )
-
-    await interaction.response.send_message(
-        "✅ Your roleplay request has been submitted.",
-        ephemeral=True
-    )
-
-    import discord
-from discord import app_commands
-import time
-
 @bot.event
 async def on_ready():
     try:
