@@ -750,7 +750,7 @@ async def roleplayrequest(
         )
 
     embed = discord.Embed(
-        title="📋 Ironwood Roleplay Request",
+        title="📋 Ironwood Permission Log",
         color=discord.Color.blue()
     )
 
@@ -765,7 +765,7 @@ async def roleplayrequest(
 
     if channel:
         await channel.send(
-            content=f"<@&{STAFF_ROLE_ID}> New roleplay request submitted.",
+
             embed=embed,
             allowed_mentions=discord.AllowedMentions(roles=True)
         )
@@ -774,4 +774,108 @@ async def roleplayrequest(
         "✅ Your roleplay request has been submitted.",
         ephemeral=True
     )
+
+    import discord
+from discord import app_commands
+import time
+
+# ---------------- CONFIG ----------------
+STAFF_ROLE_ID = 1515898985204944966
+PING_ROLE_ID = 1515899006922920107
+PING_ROLE_2 = 1515898975763562579
+
+active_sessions = {}
+
+# ---------------- PERMISSION CHECK ----------------
+def has_role(interaction: discord.Interaction):
+    return any(role.id == STAFF_ROLE_ID for role in interaction.user.roles)
+
+
+# ---------------- SESSION START ----------------
+@bot.tree.command(name="sessionstart", description="Start a server session.")
+async def sessionstart(interaction: discord.Interaction):
+
+    if not has_role(interaction):
+        return await interaction.response.send_message("❌ No permission.", ephemeral=True)
+
+    start_time = int(time.time())
+
+    embed = discord.Embed(
+        title="📊 Session Information",
+        color=discord.Color.green()
+    )
+
+    embed.add_field(name="Server Name", value="Ironwood State Roleplay", inline=False)
+    embed.add_field(name="Server Owner", value="spider_spaz25", inline=False)
+    embed.add_field(name="Code", value="ISRPNew", inline=False)
+    embed.add_field(name="Session Started", value=f"<t:{start_time}:R>", inline=False)
+    embed.add_field(name="Session Started By", value=interaction.user.mention, inline=False)
+
+    embed.set_image(url="https://cdn.discordapp.com/attachments/1518798605417451601/1518806629729173644/2.png")
+
+    await interaction.response.send_message(
+        content=f"<@&{PING_ROLE_ID}> <@&{PING_ROLE_2}>",
+        embed=embed
+    )
+
+
+# ---------------- SESSION VOTE ----------------
+@bot.tree.command(name="sessionvote", description="Start a session vote.")
+async def sessionvote(interaction: discord.Interaction):
+
+    if not has_role(interaction):
+        return await interaction.response.send_message("❌ No permission.", ephemeral=True)
+
+    start_time = int(time.time())
+
+    embed = discord.Embed(
+        title="📊 Session Vote Started",
+        description="React 👍 to vote for session start. 7 votes required.",
+        color=discord.Color.green()
+    )
+
+    embed.add_field(name="Votes", value="0 / 7", inline=False)
+    embed.add_field(name="Started", value=f"<t:{start_time}:R>", inline=False)
+    embed.add_field(name="Started By", value=interaction.user.mention, inline=False)
+
+    embed.set_image(url="https://cdn.discordapp.com/attachments/1518798605417451601/1518806629729173644/2.png")
+
+    msg = await interaction.response.send_message(
+        content=f"<@&{PING_ROLE_ID}> <@&{PING_ROLE_2}>",
+        embed=embed
+    )
+
+    # store vote system
+    active_sessions[interaction.id] = {
+        "votes": set(),
+        "required": 7,
+        "starter": interaction.user.id
+    }
+
+
+# ---------------- SESSION SHUTDOWN ----------------
+@bot.tree.command(name="sessionshutdown", description="End the current session.")
+async def sessionshutdown(interaction: discord.Interaction):
+
+    if not has_role(interaction):
+        return await interaction.response.send_message("❌ No permission.", ephemeral=True)
+
+    end_time = int(time.time())
+
+    embed = discord.Embed(
+        title="🚨 Session Shutdown",
+        description="The current session has been shut down.",
+        color=discord.Color.red()
+    )
+
+    embed.add_field(name="Ended By", value=interaction.user.mention, inline=False)
+    embed.add_field(name="Time", value=f"<t:{end_time}:R>", inline=False)
+
+    embed.set_image(url="https://cdn.discordapp.com/attachments/1518798605417451601/1518806629729173644/2.png")
+
+    await interaction.response.send_message(embed=embed)
+    @bot.event
+async def on_ready():
+    await bot.tree.sync()
+    print("Slash commands synced")
 bot.run("MTUyMzM4MzEyNDkyMTI4Njc2Nw.GQjvwY.TcTNO1figVcz8ezQo9GM56ZIixzP-oAljmhOPI")
