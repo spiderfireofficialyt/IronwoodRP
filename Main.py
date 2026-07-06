@@ -874,8 +874,5 @@ async def sessionshutdown(interaction: discord.Interaction):
     embed.set_image(url="https://cdn.discordapp.com/attachments/1518798605417451601/1518806629729173644/2.png")
 
     await interaction.response.send_message(embed=embed)
-    @bot.event
-async def on_ready():
-    await bot.tree.sync()
-    print("Slash commands synced")
+
 bot.run("MTUyMzM4MzEyNDkyMTI4Njc2Nw.GQjvwY.TcTNO1figVcz8ezQo9GM56ZIixzP-oAljmhOPI")
